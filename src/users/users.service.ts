@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from './schemas/user.schema';
 import { CreateUserDTO } from './dto/create-user.dto';
@@ -28,5 +28,23 @@ export class UsersService {
         const savedUser = await newUser.save()
         const { __v, ...result } = savedUser["_doc"]
         return result
+    }
+
+    async editUser(editUserDTO: any, id: string): Promise<User> {
+        await this.userModel.updateOne(
+            { _id: id },
+            {
+                $set: {
+                    username: editUserDTO.username,
+                    profilePhoto: editUserDTO.profilePhoto
+                }
+            }
+        )
+        const updatedUser = await this.userModel.findById(id);
+        if (!updatedUser) {
+            throw new NotFoundException('Usuario no encontrado después de la actualización');
+        }
+        const { __v, ...resultData } = updatedUser["_doc"];
+        return resultData;
     }
 }
