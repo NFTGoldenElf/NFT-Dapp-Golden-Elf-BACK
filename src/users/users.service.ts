@@ -47,4 +47,14 @@ export class UsersService {
         const { __v, ...resultData } = updatedUser["_doc"];
         return resultData;
     }
+
+    async getAllUsersExceptMe(address: string) {
+        const users = await this.userModel.find({ accountAddress: { $ne: address } })
+        let formattedUsers = [];
+        for (let i = 0; i < users.length; i++) {
+            const { __v, _id, ...result } = users[i]["_doc"];
+            formattedUsers.push(result)
+        }
+        return formattedUsers;
+    }
 }

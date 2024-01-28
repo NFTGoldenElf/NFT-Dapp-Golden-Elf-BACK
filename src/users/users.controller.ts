@@ -12,7 +12,7 @@ export class UsersController {
         private cloudinaryService: CloudinaryService
     ) { }
 
-    @Get('/findbyaddress/:address')
+    @Get('findbyaddress/:address')
     async findByAdress(@Param('address') address: string) {
         const response = this.usersService.findByAddress(address);
         return response;
@@ -24,7 +24,7 @@ export class UsersController {
         return newUser;
     }
 
-    @Patch('/:id')
+    @Patch(':id')
     @UseInterceptors(FileInterceptor('profilePhoto'))
     async editUser(
         @Body() editUserDTO: EditUserDTO,
@@ -46,5 +46,12 @@ export class UsersController {
         }
         const editUser = await this.usersService.editUser(editInfo, id)
         return editUser;
+    }
+    
+    @Get(':address')
+    async getUsersExceptMe(@Param('address') address: string) {
+        if(!address) throw Error('address not provided')
+        const users = await this.usersService.getAllUsersExceptMe(address);
+        return users;
     }
 }

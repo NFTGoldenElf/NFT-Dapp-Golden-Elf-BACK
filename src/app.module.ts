@@ -6,6 +6,7 @@ import { UsersModule } from './users/users.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import * as dotenv from 'dotenv'
 import { ConfigModule } from '@nestjs/config';
+import { NftsModule } from './nfts/nfts.module';
 
 dotenv.config()
 
@@ -14,7 +15,8 @@ dotenv.config()
     MongooseModule.forRoot(process.env.MONGO_URI_DB),
     UsersModule,
     CloudinaryModule,
-    ConfigModule.forRoot({ isGlobal: true })],
+    ConfigModule.forRoot({ isGlobal: true }),
+    NftsModule],
   controllers: [AppController],
   providers: [AppService],
 })
